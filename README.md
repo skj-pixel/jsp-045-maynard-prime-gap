@@ -1,40 +1,68 @@
-# JSP-000045 — Maynard Prime Gap Lean Formalization
+# JSP-000045 — Lean 4.20 scaffold for How large can gaps between consecutive primes be? ...
 
-> **Problem**: Erdős–Rankin large prime gap conjecture (1938)
-> **Statement**: lim sup (p_{n+1} - p_n) / (log p_n)² = ∞
-> **Solver**: James Maynard (2014, arxiv:1408.5110)
-> **JSP bounty**: USD $10,000
-> **Current status**: Solved, Lean proof: No, Eligible: No
+> **Problem (upstream JSP-000045)**: How large can gaps between consecutive primes be? Are infinitely many gaps larger than the proposed lower bound?
+> **Solver**: James Maynard (2014) and Ford–Green–Konyagin–Tao (2014) [Annals 2016]
+> **JSP bounty**: USD $100
+> **Upstream status** ([TheJustinSunPrize/awards](https://github.com/TheJustinSunPrize/awards/blob/main/problems/catalog-0001-0100.md#JSP-000045)): **Solved, Lean proof: No, Eligible to claim: No**
 
-## Structure
+## What this repository is
+
+This is a **Lean 4.20.0 + Mathlib v4.20.0 scaffold** for the JSP outer theorem.
+The file structure (lake project, lean-toolchain, lakefile, single `JSP45.lean`)
+is published so that a future Lean formalization team can clone this repository,
+fill in the `sorry` placeholders, and produce a verified Lean proof.
+
+**This is NOT a Lean proof.** Every `theorem` in `JSP45.lean`
+ends with `:= by sorry`. Per the JSP `docs/verification.md` policy:
+
+> A Lean submission without the complete proof is invalid and will not be accepted.
+
+## Files
 
 ```
-JSP045.lean              -- Outer statement: lim sup of gap/(log p)² = ∞
-MaynardWeights.lean      -- Maynard's key weight selection
-MaierMatrix.lean         -- Maier matrix method
-BombieriVinogradov.lean  -- Bombieri-Vinogradov theorem on primes in AP
-LargeSievePrime.lean     -- Large sieve specialized for primes
+JSP45.lean    -- Outer statement with `sorry`
+README.md              -- This file
+lakefile.toml          -- Lean 4 build config (lake)
+lean-toolchain.json     -- Pinned toolchain: Lean v4.20.0
+lake-manifest.json     -- Pinned dependencies: mathlib v4.20.0
+.gitignore             -- Excludes `.lake/` build cache
 ```
 
-## Build
+## Build (to verify the scaffold compiles)
 
 ```sh
 lake build
 ```
 
-Lean 4.20.0 + Mathlib v4.20.0.
+## Math content
 
-## Attribution
+Outer statement: lim sup (p_{n+1} - p_n) / (log p_n)^2 = infinity
 
-Original Lean code by `skj-pixel`. Reference: Maynard (2014)
-"Large gaps between primes" arXiv:1408.5110. We do **not** mirror
-Axiom Math's PrimeGapsLib (which addresses the bounded-gap JSP-000041,
-not the unbounded JSP-000045).
+The Lean file states the outer theorem in a form suitable for filling in with
+Mathlib lemmas. To make this a complete Lean proof, a team would need to:
 
-## Plan
+1. Port the corresponding published paper (e.g. James Maynard (2014) and Ford–Green–Konyagin–Tao (2014) [Annals 2016]).
+2. For each lemma in the paper, find or build a corresponding Mathlib
+   statement.
+3. Replace `sorry` with the corresponding Lean tactic proof.
 
-1. ✅ Project scaffold + outer statement
-2. (TODO) Maynard weights: explicit formula + Selberg optimization
-3. (TODO) Maier matrix: rank estimate on diagonal
-4. (TODO) Bombieri-Vinogradov: average over q
-5. (TODO) Combine: gap > C log² p occurs infinitely often
+## References
+
+- Mathematical proof: see the publication reference cited above
+- Upstream JSP catalog: https://github.com/TheJustinSunPrize/awards/blob/main/problems/catalog-0001-0100.md#JSP-000045
+- Attribution policy: https://github.com/TheJustinSunPrize/awards/blob/main/docs/attribution.md
+
+## Submission path
+
+To claim the bounty for JSP-000045, the Lean author (or a contributor with
+attributable credit on the Lean repo) must:
+
+1. Fill the `sorry` in `JSP45.lean` and verify the proof with
+   `lake build`.
+2. Open a PR to `TheJustinSunPrize/awards` adding the Lean source URL to the
+   catalog entry.
+3. After merge, open a claim-award issue from the Lean author's own GitHub
+   account using the `claim-award.yml` template.
+4. Email identity-verification materials to `thejustinsunprize@hejustinsun.com`.
+
+None of these steps can be automated from an agent sandbox.
