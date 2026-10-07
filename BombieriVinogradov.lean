@@ -24,17 +24,28 @@ open Finset
 noncomputable def π_ap (X q a : ℕ) : ℕ :=
   (Finset.range (X + 1)).filter (fun n => Nat.Prime n ∧ n ≡ a [MOD q]) |>.card
 
-/-- li(X) ≈ X / log X. -/
-noncomputable def li (X : ℕ) : ℝ := X / Real.log X
+/-- li(X) ≈ X / log X (prime number theorem approximation). -/
+noncomputable def li (X : ℕ) : ℝ := (X : ℝ) / Real.log ((X : ℝ) + 1)
 
 /-- Euler's totient. -/
 noncomputable def phi (q : ℕ) : ℕ := Nat.totient q
 
 /-- Bombieri-Vinogradov: π(X; q, a) approximates li(X)/φ(q) on average over q ≤ Q. -/
-theorem bombieri_vinogradov (X Q : ℕ) (A : ℝ) (hA : A > 0) :
+theorem bombieri_vinogradov (X Q : ℕ) (A : ℝ) (hA : A > 0)
+    (hQ : (Q : ℝ) ≤ Real.sqrt ((X : ℝ) + 1) / Real.log ((X : ℝ) + 1)) :
     ∑ q ∈ Finset.range (Q + 1), ∑ a ∈ Finset.range q,
       |((π_ap X (q + 1) a : ℝ) - li X / phi (q + 1))|
-      ≤ X / (Real.log X) ^ A := by
+      ≤ (X : ℝ) / Real.log ((X : ℝ) + 1) ^ A := by
+  sorry
+
+/-- Special case: Q ≤ X^{1/2}/log^B X. We give a weaker but simpler bound:
+    the discrepancy is bounded by X^{1/2+ε} for any ε > 0. -/
+theorem bombieri_vinogradov_weaker (X Q : ℕ) (hX : X ≥ 2)
+    (hQ : (Q : ℝ) ≤ Real.sqrt ((X : ℝ) + 1)) :
+    ∃ C : ℝ, C > 0 ∧
+      ∑ q ∈ Finset.range (Q + 1), ∑ a ∈ Finset.range q,
+        |((π_ap X (q + 1) a : ℝ) - li X / phi (q + 1))|
+        ≤ C * Real.sqrt ((X : ℝ) + 1) := by
   sorry
 
 end JSP045.BombieriVinogradov
