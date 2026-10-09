@@ -10,26 +10,37 @@
     "Large gaps between primes", Annals of Mathematics 183 (2016), 915-933.
   Also independently by Ford, Green, Konyagin, Maynard, Tao 2014.
 
-  This file formalizes the *outer* statement only.
-  The proof machinery (Maynard sieve, Maier matrix, Bombieri-Vinogradov) is
-  in sibling files.
+  This file formalizes the *outer* statement only. The proof machinery
+  (Maynard sieve, Maier matrix, Bombieri-Vinogradov) is in sibling files.
+
+  We use `Nat.nth` from Mathlib (4.20+) which is fully defined, not
+  axiomatized. This is a structural improvement over the earlier scaffold.
 -/
 
-import Mathlib.Data.Nat.Prime.Basic
+import Mathlib.Data.Nat.Prime.Nth
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Tactic
 
 namespace JSP045
 
-/-- The nth prime (1-indexed: nth_prime 1 = 2, nth_prime 2 = 3, ...).
-    Mathlib v4.20 doesn't have nth_prime directly; we use the predicate form. -/
-noncomputable def nthPrime (n : ℕ) : ℕ := n + 1  -- placeholder; replaced by full def later
+/-- The nth prime (0-indexed: nthPrime 0 = 2, nthPrime 1 = 3, ...).
+    Delegates to Mathlib's `Nat.nth`. -/
+noncomputable def nthPrime (n : ℕ) : ℕ := Nat.nth Nat.Prime n
 
-/-- A non-decreasing enumeration of primes. The actual nth-prime
-    function is not yet in Mathlib v4.20. We use an axiomatized version. -/
-axiom nthPrime_is_prime : ∀ n : ℕ, Nat.Prime (nthPrime n)
-axiom nthPrime_strict_mono : ∀ m n : ℕ, m < n → nthPrime m < nthPrime n
-axiom nthPrime_surjective_primes : ∀ p : ℕ, Nat.Prime p → ∃ n : ℕ, nthPrime n = p
+/-- Sanity check: nthPrime 0 = 2 (the first prime). -/
+example : nthPrime 0 = 2 := Nat.nth_prime_zero_eq_two
+
+/-- Sanity check: nthPrime 1 = 3 (the second prime). -/
+example : nthPrime 1 = 3 := Nat.nth_prime_one_eq_three
+
+/-- Sanity check: nthPrime 2 = 5 (the third prime). -/
+example : nthPrime 2 = 5 := Nat.nth_prime_two_eq_five
+
+/-- Sanity check: nthPrime 3 = 7 (the fourth prime). -/
+example : nthPrime 3 = 7 := Nat.nth_prime_three_eq_seven
+
+/-- Sanity check: nthPrime 4 = 11 (the fifth prime). -/
+example : nthPrime 4 = 11 := Nat.nth_prime_four_eq_eleven
 
 /-- Gap between consecutive primes p_{n+1} - p_n. -/
 noncomputable def primeGap (n : ℕ) : ℕ :=
